@@ -57,7 +57,8 @@ for filename in os.listdir(extract_path):
             if av_result['result'] is not None:
                 print(f"{av_name.ljust(max_width)}: Detected")
             else:
-                print(f"{av_name.ljust(max_width)}: Not Detected")
+                # print(f"{av_name.ljust(max_width)}: Not Detected")
+                continue
 
         print("stage 4.2:")
         avs = ['Fortinet', 'McAfee', 'Yandex', 'Sophos']
