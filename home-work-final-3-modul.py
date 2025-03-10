@@ -68,7 +68,7 @@ for filename in os.listdir(extract_path):
             else:
                 print(f"{av.ljust(max_width)}: Not found")
 
-    # Behavior - отсутствует - потому дальше закоментировал и рассматривал, по выводу тоже не нашел ничего похожего на список ip и доменов
+    # Behavior - отсутствует - потому дальше закоментировал и не рассматривал, по выводу тоже не нашел ничего похожего на список ip и доменов
     # response_sha256 = requests.get(api_url + "/" + str(file_sha256), headers=headers)
     # print(response_sha256.json())
     # response_md5 = requests.get(api_url + "/" + str(file_md5), headers=headers)
@@ -96,7 +96,7 @@ softwares = [
 
 VULNER_TOKEN = env.VULNERS_API_KEY
 vulners_api = vulners.Vulners(api_key=str(VULNER_TOKEN))
-# search_result = vulners_api.search("type:cve AND enchantments.exploitation.wildExploited:*")
+
 for software in softwares:
     search_apps = [
         {
@@ -106,11 +106,12 @@ for software in softwares:
     ]
     search_result = vulners_api.audit_software(software=search_apps)
     print(f"product: {software['Program']}, Version: {software['Version']}")
-    for vuln in search_result[0]['vulnerabilities']:
-        if vuln['type'] == 'cve':
-            print(f"\t{vuln['id']}")
-            cve_exploits = vulners_api.find_exploit_all(vuln['id'], limit=5)
-            if len(cve_exploits) != 0:
-                print("\t\tЕсть информация об эксплойтах")
-    # break
+    if len(search_result) > 0:
+      for vuln in search_result[0]['vulnerabilities']:
+          if vuln['type'] == 'cve':
+              print(f"\t{vuln['id']}")
+              cve_exploits = vulners_api.find_exploit_all(vuln['id'], limit=5)
+              if len(cve_exploits) != 0:
+                  print("\t\tЕсть информация об эксплойтах")
+      
 
